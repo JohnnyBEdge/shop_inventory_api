@@ -8,6 +8,7 @@ const cors = require('cors');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const inventoryAPIRouter = require('./routes/api/inventory');
+const accountsAPIRouter = require('./routes/api/accounts');
 
 const app = express();
 
@@ -21,7 +22,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/api/inventory',inventoryAPIRouter)
+app.use('/api/inventory',inventoryAPIRouter);
+app.use('/api/accounts',accountsAPIRouter);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
