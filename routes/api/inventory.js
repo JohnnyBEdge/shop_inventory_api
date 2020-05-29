@@ -41,7 +41,7 @@ router.delete('/:id', async function(req, res){
 });
 
 //EDIT inventory
-router.put('/:id', async function(req, res){
+router.patch('/:id', async function(req, res){
   try{
     const data = await editInventory(req.params.id, req.body);
     res.send(data);

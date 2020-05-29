@@ -11,7 +11,7 @@ const collName = 'accounts';
 //DB settings
 const settings = { useUnifiedTopology: true };
 
-const getAccounts = () => {
+const getAccountByEmail = (key, value) => {
     const promise = new Promise((resolve, reject) => {
         MongoClient.connect(url, settings, function(err, client){
             if(err){
@@ -20,7 +20,7 @@ const getAccounts = () => {
                 console.log(`Successfully connected to DB: ${dbName} for GET.`);
                 const db = client.db(dbName);
                 const collection = db.collection(collName);
-                collection.find({}).toArray(function(err,docs){
+                collection.find({[key] : value}).toArray(function(err,docs){
                     if(err){
                         reject(err);
                     } else {
@@ -59,6 +59,6 @@ const addAccount = (account) => {
 };
 
 module.exports = {
-    getAccounts,
+    getAccountByEmail,
     addAccount
 }
