@@ -6,9 +6,21 @@ const jwt = require('jsonwebtoken');
 const privateKey = process.env.PRIVATE_KEY;
 
 const {
+    getAccounts,
   getAccountByEmail,
   addAccount
 } = require('../../dal/accounts');
+
+//get accounts
+router.get('/', async function(req, res){
+    try{
+        const data = await getAccounts();
+        res.send(data);
+    } catch(err){
+        console.log(err);
+        res.status(500).send("Internal server error; check logs");
+    };
+});
 
 // login account
 router.post('/login', async function (req, res) {

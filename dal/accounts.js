@@ -58,7 +58,31 @@ const addAccount = (account) => {
     return promise;
 };
 
+const getAccounts = () => {
+    const promise = new Promise((resolve, reject) => {
+        MongoClient.connect(url, settings, async function(err, client){
+            if(err){
+                reject(err);
+            } else {
+                console.log(`Successfully connected to DB: ${dbName} for POST.`);
+                const db = client.db(dbName);
+                const collection = db.collection(collName);
+                collection.find({}).toArray(function(err,docs){
+                    if(err){
+                        console.log(err);
+                    } else {
+                        resolve(docs);
+                        client.close();
+                    }
+                })
+            };
+        })
+    });
+    return promise;
+};
+
 module.exports = {
     getAccountByEmail,
-    addAccount
+    addAccount,
+    getAccounts
 }
