@@ -34,8 +34,7 @@ router.post('/login', async function (req, res) {
             res.status(500).send('Login Failed');
             console.log(`${body.email} already exists`);
         } else {
-            console.log('body', body);
-            console.log('dbUser', dbUser);
+            // console.log('body', body);
             bcrypt.compare(body.password, dbUser[0].password, function (err, result) {
                 if(err) throw err;
                 if(!result){
@@ -50,7 +49,11 @@ router.post('/login', async function (req, res) {
                             console.log(body.email, token);
                             //puts token in header instead of body
                             res.set('authentication', token);
-                            res.set('Access-Control-Expose-Headers', 'authentication');
+                            //puts admin status in header
+                            res.set('adminStatus',dbUser[0].isAdmin)
+
+                            //add space to authen and add role
+                            res.set('Access-Control-Expose-Headers', 'authentication, adminStatus');
                             res.send();
                         }
                     ); 

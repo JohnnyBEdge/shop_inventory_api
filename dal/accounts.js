@@ -17,14 +17,14 @@ const getAccountByEmail = (key, value) => {
             if(err){
                 reject(err);
             } else {
-                console.log(`Successfully connected to DB: ${dbName} for GET.`);
+                console.log(`Successfully connected to DB: ${dbName} for POST.`);
                 const db = client.db(dbName);
                 const collection = db.collection(collName);
                 collection.find({[key] : value}).toArray(function(err,docs){
                     if(err){
                         reject(err);
                     } else {
-                        console.log(docs);
+                        console.log("docs ", docs);
                         resolve(docs);
                         client.close();
                     };
