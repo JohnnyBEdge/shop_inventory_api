@@ -24,7 +24,7 @@ const getAccountByEmail = (key, value) => {
                     if(err){
                         reject(err);
                     } else {
-                        console.log("docs ", docs);
+                        console.log("docs ", docs[0].fname);
                         resolve(docs);
                         client.close();
                     };
@@ -58,6 +58,36 @@ const addAccount = (account) => {
     return promise;
 };
 
+const addToCart = (id, item) => {
+    const promise = new Promise((resolve, reject) => {
+        MongoClient.connect(url, settings, async function(err, client){
+            if(err){
+                reject(err);
+            } else {
+                console.log(`Successfully connected to DB: ${dbName} for AddToCart.`);
+                const db = client.db(dbName);
+                const collection = db.collection(collName);
+                await collection.update(
+                    {_id: ObjectID(id)},
+                    {$set: {
+                        cart: item
+                    }},
+                    {upsert: true},
+                    (err, result) => {
+                        if(err){
+                            console.log(err);
+                        } else {
+                            resolve({updated_cart: cart});
+                            client.close();
+                        };
+                    }
+                )
+            };
+        })
+    });
+    return promise;
+};
+
 const getAccounts = () => {
     const promise = new Promise((resolve, reject) => {
         MongoClient.connect(url, settings, async function(err, client){
@@ -84,5 +114,6 @@ const getAccounts = () => {
 module.exports = {
     getAccountByEmail,
     addAccount,
-    getAccounts
+    getAccounts,
+    addToCart
 }

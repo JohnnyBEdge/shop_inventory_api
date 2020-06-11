@@ -8,7 +8,8 @@ const privateKey = process.env.PRIVATE_KEY;
 const {
     getAccounts,
   getAccountByEmail,
-  addAccount
+  addAccount,
+  addToCart
 } = require('../../dal/accounts');
 
 //get accounts
@@ -49,12 +50,11 @@ router.post('/login', async function (req, res) {
                             console.log(body.email, token);
                             //puts token in header instead of body
                             res.set('authentication', token);
-                            //puts admin status in header
-                            res.set('adminStatus',dbUser[0].isAdmin)
-
-                            //add space to authen and add role
-                            res.set('Access-Control-Expose-Headers', 'authentication, adminStatus');
-                            res.send();
+                            //removes sensitive user data before sending to the body
+                            // delete dbUser[0]._id;
+                            delete dbUser[0].password
+                            res.set('Access-Control-Expose-Headers', 'authentication');
+                            res.send(dbUser[0]);
                         }
                     ); 
                 }
@@ -94,5 +94,15 @@ router.post('/register', function (req, res) {
         res.status(500).send('Internal Server Issue, Check Server Logs');
     };
 });
+
+router.patch('/:id', async function(req, res){
+    try{
+        const data = await addToCart(req.params.id, req.body)
+        req.send(data);
+    } catch(err){
+        console.log(err);
+        res.status(500).send("Internal server error; check logs");
+    }
+})
 
 module.exports = router;

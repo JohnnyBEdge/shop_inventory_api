@@ -105,6 +105,7 @@ const editInventory = (id, inventory) => {
                             console.log(err);
                         } else {
                             resolve({updated_id: id});
+                            client.close();
                         };
                     }
                 )
