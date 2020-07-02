@@ -87,7 +87,7 @@ const editInventory = (id, inventory) => {
             if(err){
                 reject(err);
             } else {
-                console.log(`Successfully connected to DB: ${dbName} for PUT.`);
+                console.log(`Successfully connected to DB: ${dbName} for PATCH.`);
                 const db = client.db(dbName);
                 const collection = db.collection(collName);
                 await collection.update(

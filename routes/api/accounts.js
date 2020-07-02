@@ -42,7 +42,11 @@ router.post('/login', async function (req, res) {
                     res.status(401).send('Login Failed');
                     console.log(`Password for ${body.email} doesn't match `);
                 } else {
-                    jwt.sign({ _id: dbUser[0]._id }, 
+                    let expire = new Date(Date.now());
+                    expire.setDate(expire.getDate() + 3);
+                    jwt.sign({
+                        expires: expire,
+                        _id: dbUser[0]._id }, 
                         privateKey, 
                         { algorithm: 'HS512' }, 
                         function (err, token) {
